@@ -1,0 +1,353 @@
+#    -*- mode: org -*-
+#+OPTIONS: reveal_center:t reveal_progress:t reveal_history:t reveal_control:t
+#+OPTIONS: reveal_mathjax:t reveal_rolling_links:nil reveal_keyboard:t reveal_overview:t num:nil
+#+OPTIONS: reveal_width:1600 reveal_height:900
+#+OPTIONS: toc:nil <:nil timestamp:nil email:t reveal_slide_number:"c/t"
+#+REVEAL_MARGIN: 0.1
+#+REVEAL_MIN_SCALE: 0.5
+#+REVEAL_MAX_SCALE: 2.5
+#+REVEAL_TRANS: none
+#+REVEAL_THEME: blood
+#+REVEAL_HLEVEL: 1
+#+REVEAL_EXTRA_CSS: ./presentation.css
+#+REVEAL_ROOT: ../reveal.js/
+
+#+TITLE: Easing into Modern C++
+#+AUTHOR: Ben Deane
+#+EMAIL: bdeane@blizzard.com
+#+DATE: Monday May 6th, 2018
+
+#+REVEAL_HTML: <script type="text/javascript" src="./presentation.js"></script>
+
+* Title slide settings                                             :noexport:
+#+BEGIN_SRC emacs-lisp
+(setq org-reveal-title-slide
+(concat "<div class='vertspace6'/>"
+"<h2>%t</h2><h3>A Lightning Talk for the Unsure</h3>
+<h3>(or those who talk to the skeptical)</h3></div>"
+"<h3>%a / <a href=\"mailto:bdeane@blizzard.com\">bdeane@blizzard.com</a> / "
+"<a href=\"http://twitter.com/ben_deane\">@ben_deane</a></h3>"
+"<h4>C++Now / %d</h4>"))
+(set-face-foreground 'font-lock-comment-face "dark green")
+#+END_SRC
+
+* A Common Notion
+#+REVEAL_HTML: <div class='vertspace2'></div>
+#+BEGIN_QUOTE
+"Modern C++ doesn't help me with the kind of programming problems I have."
+#+REVEAL_HTML: <div></div><div class='author'>
+-- A C++ 98/03 Programmer
+#+REVEAL_HTML: </div>
+#+END_QUOTE
+
+#+BEGIN_NOTES
+This is a very common expression. People have learned how to solve their
+problems. They're not stupid. They just don't see the benefit of change.
+
+You can replace "Modern C++" with many things here: e.g. unit tests; strong,
+static types; collaboration?
+
+They have another problem: the world is changing around them. One of the
+problems almost all of us have is hiring. And hiring a C++ programmer today
+means hiring someone who is used to "Modern C++".
+#+END_NOTES
+
+* Easy Features to Adopt
+#+REVEAL_HTML: <div class='vertspace2'></div>
+Here are 7 (± 2) features of C++11 that you can adopt today.
+
+No downside. All upside. Can be applied piecemeal.
+
+#+BEGIN_NOTES
+These features are the equivalent of using a C++ compiler to compile your C
+code, and adopting C++-style comments for convenience.
+
+For all of these features, I promise you zero or negative runtime overhead
+and/or compile-time overhead.
+
+And importantly, you don't have to change your whole codebase. You can start
+using these things in new code and apply them to older code as you revisit it.
+#+END_NOTES
+
+* #1: ~override~
+Any time you declare a ~virtual~ function override in a derived class, put
+~override~ after it.
+
+#+REVEAL_HTML: <div id="left">
+#+BEGIN_SRC c++
+struct Foo { virtual void Frob(); };
+
+struct Bar : Foo {
+  virtual void Frob();
+};
+#+END_SRC
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: <div id="right" style="text-align:left;">
+#+BEGIN_SRC c++
+struct Foo { virtual void DoThing(); };
+
+struct Bar : Foo {
+  virtual void DoThing() override;
+};
+#+END_SRC
+#+REVEAL_HTML: </div>
+
+If you do nothing else, /do this/.
+
+#+BEGIN_NOTES
+This is super easy. And it protects against, and finds, real bugs.
+
+The larger your codebase and team, the more you benefit from this.
+
+I found a 4-year-old bug because of this: someone had added a extra parameter to
+a function override to support a different case. It had a default value so
+nobody spotted that it wasn't overriding the base class function any more. But
+the compiler knew.
+#+END_NOTES
+
+* #2: ~underlying_type~ for ~enum~
+#+REVEAL_HTML: <div id="left">
+#+BEGIN_SRC c++
+enum ChipShopOrder
+{
+  COD_AND_CHIPS,
+  PLAICE_AND_CHIPS,
+  MUSHY_PEAS,
+  CURRY_SAUCE,
+  ...
+  INVALID_ORDER = 0xffffffff;
+}
+#+END_SRC
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: <div id="right"><div style="text-align:left;">
+#+BEGIN_SRC c++
+enum ChipShopOrder : uint32_t
+{
+  COD_AND_CHIPS,
+  PLAICE_AND_CHIPS,
+  MUSHY_PEAS,
+  CURRY_SAUCE,
+  ...
+  INVALID_ORDER = 0xbadf00d;
+}
+#+END_SRC
+#+REVEAL_HTML: </div></div>
+Works for old-style (unscoped) ~enum~ as well new scoped ~enum~.
+
+#+BEGIN_NOTES
+No more bit-width forcing values.
+
+You can forward declare an ~enum~ with the ~underlying_type~.
+
+Helps with serialization.
+#+END_NOTES
+
+* #3: ~using~ over ~typedef~
+~typedef~: never straightforward, never readable.
+#+REVEAL_HTML: <div id="left">
+#+BEGIN_SRC c++
+typedef int AnimId;
+
+typedef int (*FP)(int, int);
+
+
+#+END_SRC
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: <div id="right"><div style="text-align:left;">
+#+BEGIN_SRC c++
+using AnimId = int;
+
+using FP = int (*)(int, int);
+// or:
+using FP = auto(*) (int, int) -> int;
+#+END_SRC
+#+REVEAL_HTML: </div></div>
+~auto (*)~ means "pointer-to-function" now.
+
+
+#+BEGIN_NOTES
+~typedef~ was always a bit confusing to me. Defining X = Y is much more
+intuitive. Even if it's second nature to you, consider how it reads to others.
+Declaration syntax is definitely not one of C++'s strong points.
+
+If you use ~auto~ nowhere else, this is a reasonable use of it. ~auto (*)~ means
+"pointer to function".
+#+END_NOTES
+
+* #4: Default member initialization
+#+REVEAL_HTML: <div id="left">
+#+BEGIN_SRC c++
+struct S
+{
+  S() : value(5) {}
+  int value;
+};
+
+int foo() {
+  S s;
+  return s.value;
+}
+#+END_SRC
+#+REVEAL_HTML: <a href="https://godbolt.org/g/Wv9wge" data-preview-link>https://godbolt.org/g/Wv9wge</a>
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: <div id="right" style="text-align:left;">
+#+BEGIN_SRC c++
+struct S
+{
+  // constructor is not needed...
+  int value = 5;
+};
+
+int foo() {
+  S s;
+  return s.value;
+}
+#+END_SRC
+#+REVEAL_HTML: <a href="https://godbolt.org/g/AGZcwL" data-preview-link>https://godbolt.org/g/AGZcwL</a>
+#+REVEAL_HTML: </div>
+
+#+BEGIN_NOTES
+There is plenty of code that has default constructors in structs for no
+particular work, just to initialize.
+
+This will probably improve your debug performance.
+
+C++ is to some extent becoming an optimize-only language; if you have to care
+about performance in debug mode, here's something that can help.
+#+END_NOTES
+
+* #5: ~delete~ unimplemented SMFs
+Turn a link error into a (more understandable) compile error.
+#+REVEAL_HTML: <div id="left">
+#+BEGIN_SRC c++
+class Foo {
+private:
+  Foo(const Foo&);            // unimplemented
+  Foo& operator=(const Foo&); // unimplemented
+};
+#+END_SRC
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: <div id="right"><div style="text-align:left;">
+#+BEGIN_SRC c++
+class Foo {
+public:
+  Foo(const Foo&) = delete;
+  Foo& operator=(const Foo&) = delete;
+};
+#+END_SRC
+#+REVEAL_HTML: </div></div>
+
+#+BEGIN_NOTES
+If you try to copy an uncopyable class, you're going to get a better error, at
+compile time.
+#+END_NOTES
+
+* #6: ~constexpr~ array size
+#+REVEAL_HTML: <div id="left">
+#+BEGIN_SRC c++
+// x had better actually be an array!
+#define lengthof(x) \
+  (sizeof(x) / sizeof(x[0]));
+
+
+#+END_SRC
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: <div id="right"><div style="text-align:left;">
+#+BEGIN_SRC c++
+template <typename A, std::size_t N>
+constexpr std::size_t lengthof(T (&)[N])
+{
+  return N;
+}
+#+END_SRC
+#+REVEAL_HTML: </div></div>
+
+#+BEGIN_NOTES
+Even if you don't want to dive into ~constexpr~ usage, this is a simple win.
+Extra type safety for no cost. It's just a recipe.
+#+END_NOTES
+
+* #7: ~explicit~ conversion to ~bool~
+Ditch the safe bool idiom, use ~explicit~ conversion to bool.
+#+REVEAL_HTML: <div id="left">
+#+BEGIN_SRC c++
+struct Foo
+{
+  // to prevent unwanted conversion
+  // to bool, do a trick
+  // e.g. with a "magic" PMF type
+};
+#+END_SRC
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: <div id="right"><div style="text-align:left;">
+#+BEGIN_SRC c++
+struct Foo
+{
+  explicit operator bool() const {
+    // whichever member we want to test
+  };
+};
+#+END_SRC
+#+REVEAL_HTML: </div></div>
+
+#+BEGIN_NOTES
+~explicit~ conversion operator here gives you a conversion to ~bool~ everywhere
+you want one, and nowhere you don't.
+#+END_NOTES
+
+* ± 2: ~static_assert~
+#+REVEAL_HTML: <div id="left">
+#+BEGIN_SRC c++
+// something homegrown using sizeof trickery
+#define STATIC_ASSERT(cond, msg) ...
+
+STATIC_ASSERT(x, "x should hold");
+#+END_SRC
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: <div id="right"><div style="text-align:left;">
+#+BEGIN_SRC c++
+// nothing: it's in the language now
+// #define STATIC_ASSERT ...
+
+static_assert(x, "x should hold");
+#+END_SRC
+#+REVEAL_HTML: </div></div>
+
+#+BEGIN_NOTES
+Faster compile times. Less code to maintain.
+#+END_NOTES
+
+* ± 2: ~<chrono>~
+Use ~<chrono>~ for typed time.
+ - no runtime cost
+ - expressive
+ - easy to apply piecemeal
+ - any questions are probably already answered (by Howard) on SO
+
+Never accidentally pass milliseconds to a function expecting seconds again!
+#+BEGIN_NOTES
+Again, ~chrono~ types can be put in your code in piecemeal fashion.
+The benefits of using strongly typed time are many.
+#+END_NOTES
+
+* Take What You Want
+
+Start using these "no-brainer" recipes.
+
+You don't have to change your whole style or codebase.
+
+They'll just make your life better.
+
+#+REVEAL_HTML: <div id="left2" style="text-align:right;">
+ - ~override~
+ - ~enum~ type
+ - ~using~
+ - default member init
+ - ~= delete~
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: <div id="right2" style="text-align:left;">
+ - ~constexpr~ array size
+ - ~explicit~ ~bool~
+ - ~static_assert~
+ - ~#include <chrono>~
+#+REVEAL_HTML: </div>

@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Easing into Modern C++</title>
+<meta name="author" content="(Ben Deane)"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="../reveal.js/css/reveal.css"/>
+
+<link rel="stylesheet" href="../reveal.js/css/theme/blood.css" id="theme"/>
+
+<link rel="stylesheet" href="./presentation.css"/>
+
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = '../reveal.js/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide"><div class='vertspace6'/><h2>Easing into Modern C++</h2><h3>A Lightning Talk for the Unsure</h3>
+<h3>(or those who talk to the skeptical)</h3></div><h3>Ben Deane / <a href="mailto:bdeane@blizzard.com">bdeane@blizzard.com</a> / <a href="http://twitter.com/ben_deane">@ben_deane</a></h3><h4>C++Now / Monday May 6th, 2018</h4>
+</section>
+<script type="text/javascript" src="./presentation.js"></script>
+
+<section>
+<section id="slide-org2c688c4">
+<h2 id="org2c688c4">A Common Notion</h2>
+<div class='vertspace2'></div>
+<blockquote nil>
+<p>
+"Modern C++ doesn't help me with the kind of programming problems I have."
+</p>
+<div></div><div class='author'>
+<p>
+&#x2013; A C++ 98/03 Programmer
+</p>
+</div>
+</blockquote>
+
+<aside class="notes">
+<p>
+This is a very common expression. People have learned how to solve their
+problems. They're not stupid. They just don't see the benefit of change.
+</p>
+
+<p>
+You can replace "Modern C++" with many things here: e.g. unit tests; strong,
+static types; collaboration?
+</p>
+
+<p>
+They have another problem: the world is changing around them. One of the
+problems almost all of us have is hiring. And hiring a C++ programmer today
+means hiring someone who is used to "Modern C++".
+</p>
+
+</aside>
+
+</section>
+</section>
+<section>
+<section id="slide-org690b68f">
+<h2 id="org690b68f">Easy Features to Adopt</h2>
+<div class='vertspace2'></div>
+<p>
+Here are 7 (± 2) features of C++11 that you can adopt today.
+</p>
+
+<p>
+No downside. All upside. Can be applied piecemeal.
+</p>
+
+<aside class="notes">
+<p>
+These features are the equivalent of using a C++ compiler to compile your C
+code, and adopting C++-style comments for convenience.
+</p>
+
+<p>
+For all of these features, I promise you zero or negative runtime overhead
+and/or compile-time overhead.
+</p>
+
+<p>
+And importantly, you don't have to change your whole codebase. You can start
+using these things in new code and apply them to older code as you revisit it.
+</p>
+
+</aside>
+
+</section>
+</section>
+<section>
+<section id="slide-org5d48c1f">
+<h2 id="org5d48c1f">#1: <code>override</code></h2>
+<p>
+Any time you declare a <code>virtual</code> function override in a derived class, put
+<code>override</code> after it.
+</p>
+
+<div id="left">
+<div class="org-src-container">
+
+<pre  class="src src-c++"><span style="color: #a020f0;">struct</span> <span style="color: #228b22;">Foo</span> <span style="color: #707183;">{</span> <span style="color: #a020f0;">virtual</span> <span style="color: #228b22;">void</span> <span style="color: #0000ff;">Frob</span><span style="color: #7388d6;">()</span>; <span style="color: #707183;">}</span>;
+
+<span style="color: #a020f0;">struct</span> <span style="color: #228b22;">Bar</span> : <span style="color: #228b22;">Foo</span> <span style="color: #707183;">{</span>
+  <span style="color: #a020f0;">virtual</span> <span style="color: #228b22;">void</span> <span style="color: #0000ff;">Frob</span><span style="color: #7388d6;">()</span>;
+<span style="color: #707183;">}</span>;
+</pre>
+</div>
+</div>
+<div id="right" style="text-align:left;">
+<div class="org-src-container">
+
+<pre  class="src src-c++"><span style="color: #a020f0;">struct</span> <span style="color: #228b22;">Foo</span> <span style="color: #707183;">{</span> <span style="color: #a020f0;">virtual</span> <span style="color: #228b22;">void</span> <span style="color: #0000ff;">DoThing</span><span style="color: #7388d6;">()</span>; <span style="color: #707183;">}</span>;
+
+<span style="color: #a020f0;">struct</span> <span style="color: #228b22;">Bar</span> : <span style="color: #228b22;">Foo</span> <span style="color: #707183;">{</span>
+  <span style="color: #a020f0;">virtual</span> <span style="color: #228b22;">void</span> <span style="color: #0000ff;">DoThing</span><span style="color: #7388d6;">()</span> <span style="color: #a020f0;">override</span>;
+<span style="color: #707183;">}</span>;
+</pre>
+</div>
+</div>
+
+<p>
+If you do nothing else, <i>do this</i>.
+</p>
+
+<aside class="notes">
+<p>
+This is super easy. And it protects against, and finds, real bugs.
+</p>
+
+<p>
+The larger your codebase and team, the more you benefit from this.
+</p>
+
+<p>
+I found a 4-year-old bug because of this: someone had added a extra parameter to
+a function override to support a different case. It had a default value so
+nobody spotted that it wasn't overriding the base class function any more. But
+the compiler knew.
+</p>
+
+</aside>
+
+</section>
+</section>
+<section>
+<section id="slide-org27d5dcc">
+<h2 id="org27d5dcc">#2: <code>underlying_type</code> for <code>enum</code></h2>
+<div id="left">
+<div class="org-src-container">
+
+<pre  class="src src-c++"><span style="color: #a020f0;">enum</span> <span style="color: #228b22;">ChipShopOrder</span>
+<span style="color: #707183;">{</span>
+  <span style="color: #a0522d;">COD_AND_CHIPS</span>,
+  <span style="color: #a0522d;">PLAICE_AND_CHIPS</span>,
+  <span style="color: #a0522d;">MUSHY_PEAS</span>,
+  <span style="color: #a0522d;">CURRY_SAUCE</span>,
+  <span style="color: #0000ff;">...</span>
+  <span style="color: #a0522d;">INVALID_ORDER</span> = <span style="color: #a020f0;">0x</span><span style="color: #008b8b;">ffffffff</span>;
+<span style="color: #707183;">}</span>
+</pre>
+</div>
+</div>
+<div id="right"><div style="text-align:left;">
+<div class="org-src-container">
+
+<pre  class="src src-c++"><span style="color: #a020f0;">enum</span> <span style="color: #228b22;">ChipShopOrder</span> : uint32_t
+<span style="color: #707183;">{</span>
+  <span style="color: #a0522d;">COD_AND_CHIPS</span>,
+  <span style="color: #a0522d;">PLAICE_AND_CHIPS</span>,
+  <span style="color: #a0522d;">MUSHY_PEAS</span>,
+  <span style="color: #a0522d;">CURRY_SAUCE</span>,
+  <span style="color: #0000ff;">...</span>
+  <span style="color: #a0522d;">INVALID_ORDER</span> = <span style="color: #a020f0;">0x</span><span style="color: #008b8b;">badf00d</span>;
+<span style="color: #707183;">}</span>
+</pre>
+</div>
+</div></div>
+<p>
+Works for old-style (unscoped) <code>enum</code> as well new scoped <code>enum</code>.
+</p>
+
+<aside class="notes">
+<p>
+No more bit-width forcing values.
+</p>
+
+<p>
+You can forward declare an <code>enum</code> with the <code>underlying_type</code>.
+</p>
+
+<p>
+Helps with serialization.
+</p>
+
+</aside>
+
+</section>
+</section>
+<section>
+<section id="slide-org0cc4e2d">
+<h2 id="org0cc4e2d">#3: <code>using</code> over <code>typedef</code></h2>
+<p>
+<code>typedef</code>: never straightforward, never readable.
+</p>
+<div id="left">
+<div class="org-src-container">
+
+<pre  class="src src-c++"><span style="color: #a020f0;">typedef</span> <span style="color: #228b22;">int</span> <span style="color: #228b22;">AnimId</span>;
+
+<span style="color: #a020f0;">typedef</span> <span style="color: #228b22;">int</span> <span style="color: #707183;">(</span>*<span style="color: #228b22;">FP</span><span style="color: #707183;">)(</span><span style="color: #228b22;">int</span>, <span style="color: #228b22;">int</span><span style="color: #707183;">)</span>;
+
+
+</pre>
+</div>
+</div>
+<div id="right"><div style="text-align:left;">
+<div class="org-src-container">
+
+<pre  class="src src-c++"><span style="color: #a020f0;">using</span> <span style="color: #228b22;">AnimId</span> = <span style="color: #228b22;">int</span>;
+
+<span style="color: #a020f0;">using</span> <span style="color: #228b22;">FP</span> = <span style="color: #228b22;">int</span> <span style="color: #707183;">(</span>*<span style="color: #707183;">)(</span><span style="color: #228b22;">int</span>, <span style="color: #228b22;">int</span><span style="color: #707183;">)</span>;
+<span style="color: #006400;">// </span><span style="color: #006400;">or:</span>
+<span style="color: #a020f0;">using</span> <span style="color: #228b22;">FP</span> = <span style="color: #a020f0;">auto</span><span style="color: #707183;">(</span>*<span style="color: #707183;">)</span> <span style="color: #707183;">(</span><span style="color: #228b22;">int</span>, <span style="color: #228b22;">int</span><span style="color: #707183;">)</span> -&gt; <span style="color: #228b22;">int</span>;
+</pre>
+</div>
+</div></div>
+<p>
+<code>auto (*)</code> means "pointer-to-function" now.
+</p>
+
+
+<aside class="notes">
+<p>
+<code>typedef</code> was always a bit confusing to me. Defining X = Y is much more
+intuitive. Even if it's second nature to you, consider how it reads to others.
+Declaration syntax is definitely not one of C++'s strong points.
+</p>
+
+<p>
+If you use <code>auto</code> nowhere else, this is a reasonable use of it. <code>auto (*)</code> means
+"pointer to function".
+</p>
+
+</aside>
+
+</section>
+</section>
+<section>
+<section id="slide-orgee11f62">
+<h2 id="orgee11f62">#4: Default member initialization</h2>
+<div id="left">
+<div class="org-src-container">
+
+<pre  class="src src-c++"><span style="color: #a020f0;">struct</span> <span style="color: #228b22;">S</span>
+<span style="color: #707183;">{</span>
+  <span style="color: #0000ff;">S</span><span style="color: #7388d6;">()</span> : value<span style="color: #7388d6;">(</span><span style="color: #008b8b;">5</span><span style="color: #7388d6;">)</span> <span style="color: #7388d6;">{}</span>
+  <span style="color: #228b22;">int</span> <span style="color: #a0522d;">value</span>;
+<span style="color: #707183;">}</span>;
+
+<span style="color: #228b22;">int</span> <span style="color: #0000ff;">foo</span><span style="color: #707183;">()</span> <span style="color: #707183;">{</span>
+  <span style="color: #228b22;">S</span> <span style="color: #a0522d;">s</span>;
+  <span style="color: #a020f0;">return</span> s.value;
+<span style="color: #707183;">}</span>
+</pre>
+</div>
+<a href="https://godbolt.org/g/Wv9wge" data-preview-link>https://godbolt.org/g/Wv9wge</a>
+</div>
+<div id="right" style="text-align:left;">
+<div class="org-src-container">
+
+<pre  class="src src-c++"><span style="color: #a020f0;">struct</span> <span style="color: #228b22;">S</span>
+<span style="color: #707183;">{</span>
+  <span style="color: #006400;">// </span><span style="color: #006400;">constructor is not needed...</span>
+  <span style="color: #228b22;">int</span> <span style="color: #a0522d;">value</span> = <span style="color: #008b8b;">5</span>;
+<span style="color: #707183;">}</span>;
+
+<span style="color: #228b22;">int</span> <span style="color: #0000ff;">foo</span><span style="color: #707183;">()</span> <span style="color: #707183;">{</span>
+  <span style="color: #228b22;">S</span> <span style="color: #a0522d;">s</span>;
+  <span style="color: #a020f0;">return</span> s.value;
+<span style="color: #707183;">}</span>
+</pre>
+</div>
+<a href="https://godbolt.org/g/AGZcwL" data-preview-link>https://godbolt.org/g/AGZcwL</a>
+</div>
+
+<aside class="notes">
+<p>
+There is plenty of code that has default constructors in structs for no
+particular work, just to initialize.
+</p>
+
+<p>
+This will probably improve your debug performance.
+</p>
+
+<p>
+C++ is to some extent becoming an optimize-only language; if you have to care
+about performance in debug mode, here's something that can help.
+</p>
+
+</aside>
+
+</section>
+</section>
+<section>
+<section id="slide-org2a23858">
+<h2 id="org2a23858">#5: <code>delete</code> unimplemented SMFs</h2>
+<p>
+Turn a link error into a (more understandable) compile error.
+</p>
+<div id="left">
+<div class="org-src-container">
+
+<pre  class="src src-c++"><span style="color: #a020f0;">class</span> <span style="color: #228b22;">Foo</span> <span style="color: #707183;">{</span>
+<span style="color: #a020f0;">private</span>:
+  <span style="color: #0000ff;">Foo</span><span style="color: #7388d6;">(</span><span style="color: #a020f0;">const</span> <span style="color: #228b22;">Foo</span>&amp;<span style="color: #7388d6;">)</span>;            <span style="color: #006400;">// </span><span style="color: #006400;">unimplemented</span>
+  <span style="color: #228b22;">Foo</span>&amp; <span style="color: #a020f0;">operator</span><span style="color: #0000ff;">=</span><span style="color: #7388d6;">(</span><span style="color: #a020f0;">const</span> <span style="color: #228b22;">Foo</span>&amp;<span style="color: #7388d6;">)</span>; <span style="color: #006400;">// </span><span style="color: #006400;">unimplemented</span>
+<span style="color: #707183;">}</span>;
+</pre>
+</div>
+</div>
+<div id="right"><div style="text-align:left;">
+<div class="org-src-container">
+
+<pre  class="src src-c++"><span style="color: #a020f0;">class</span> <span style="color: #228b22;">Foo</span> <span style="color: #707183;">{</span>
+<span style="color: #a020f0;">public</span>:
+  <span style="color: #0000ff;">Foo</span><span style="color: #7388d6;">(</span><span style="color: #a020f0;">const</span> <span style="color: #228b22;">Foo</span>&amp;<span style="color: #7388d6;">)</span> = <span style="color: #a020f0;">delete</span>;
+  <span style="color: #228b22;">Foo</span>&amp; <span style="color: #a020f0;">operator</span><span style="color: #0000ff;">=</span><span style="color: #7388d6;">(</span><span style="color: #a020f0;">const</span> <span style="color: #228b22;">Foo</span>&amp;<span style="color: #7388d6;">)</span> = <span style="color: #a020f0;">delete</span>;
+<span style="color: #707183;">}</span>;
+</pre>
+</div>
+</div></div>
+
+<aside class="notes">
+<p>
+If you try to copy an uncopyable class, you're going to get a better error, at
+compile time.
+</p>
+
+</aside>
+
+</section>
+</section>
+<section>
+<section id="slide-org616674d">
+<h2 id="org616674d">#6: <code>constexpr</code> array size</h2>
+<div id="left">
+<div class="org-src-container">
+
+<pre  class="src src-c++"><span style="color: #006400;">// </span><span style="color: #006400;">x had better actually be an array!</span>
+<span style="color: #483d8b;">#define</span> <span style="color: #0000ff;">lengthof</span><span style="color: #707183;">(</span><span style="color: #a0522d;">x</span><span style="color: #707183;">)</span> \
+  <span style="color: #707183;">(</span><span style="color: #a020f0;">sizeof</span><span style="color: #7388d6;">(</span>x<span style="color: #7388d6;">)</span> / <span style="color: #a020f0;">sizeof</span><span style="color: #7388d6;">(</span>x<span style="color: #909183;">[</span><span style="color: #008b8b;">0</span><span style="color: #909183;">]</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>;
+
+
+</pre>
+</div>
+</div>
+<div id="right"><div style="text-align:left;">
+<div class="org-src-container">
+
+<pre  class="src src-c++"><span style="color: #a020f0;">template</span> <span style="color: #707183;">&lt;</span><span style="color: #a020f0;">typename</span> <span style="color: #228b22;">A</span>, <span style="color: #008b8b;">std</span>::<span style="color: #228b22;">size_t</span> <span style="color: #a0522d;">N</span><span style="color: #707183;">&gt;</span>
+<span style="color: #a020f0;">constexpr</span> <span style="color: #008b8b;">std</span>::<span style="color: #228b22;">size_t</span> <span style="color: #0000ff;">lengthof</span><span style="color: #707183;">(</span><span style="color: #228b22;">T</span> <span style="color: #7388d6;">(</span>&amp;<span style="color: #7388d6;">)[</span>N<span style="color: #7388d6;">]</span><span style="color: #707183;">)</span>
+<span style="color: #707183;">{</span>
+  <span style="color: #a020f0;">return</span> N;
+<span style="color: #707183;">}</span>
+</pre>
+</div>
+</div></div>
+
+<aside class="notes">
+<p>
+Even if you don't want to dive into <code>constexpr</code> usage, this is a simple win.
+Extra type safety for no cost. It's just a recipe.
+</p>
+
+</aside>
+
+</section>
+</section>
+<section>
+<section id="slide-org3c31fd0">
+<h2 id="org3c31fd0">#7: <code>explicit</code> conversion to <code>bool</code></h2>
+<p>
+Ditch the safe bool idiom, use <code>explicit</code> conversion to bool.
+</p>
+<div id="left">
+<div class="org-src-container">
+
+<pre  class="src src-c++"><span style="color: #a020f0;">struct</span> <span style="color: #228b22;">Foo</span>
+<span style="color: #707183;">{</span>
+  <span style="color: #006400;">// </span><span style="color: #006400;">to prevent unwanted conversion</span>
+  <span style="color: #006400;">// </span><span style="color: #006400;">to bool, do a trick</span>
+  <span style="color: #006400;">// </span><span style="color: #006400;">e.g. with a "magic" PMF type</span>
+<span style="color: #707183;">}</span>;
+</pre>
+</div>
+</div>
+<div id="right"><div style="text-align:left;">
+<div class="org-src-container">
+
+<pre  class="src src-c++"><span style="color: #a020f0;">struct</span> <span style="color: #228b22;">Foo</span>
+<span style="color: #707183;">{</span>
+  <span style="color: #a020f0;">explicit</span> <span style="color: #a020f0;">operator</span> <span style="color: #228b22;">bool</span><span style="color: #7388d6;">()</span> <span style="color: #a020f0;">const</span> <span style="color: #7388d6;">{</span>
+    <span style="color: #006400;">// </span><span style="color: #006400;">whichever member we want to test</span>
+  <span style="color: #7388d6;">}</span>;
+<span style="color: #707183;">}</span>;
+</pre>
+</div>
+</div></div>
+
+<aside class="notes">
+<p>
+<code>explicit</code> conversion operator here gives you a conversion to <code>bool</code> everywhere
+you want one, and nowhere you don't.
+</p>
+
+</aside>
+
+</section>
+</section>
+<section>
+<section id="slide-org54d8279">
+<h2 id="org54d8279">± 2: <code>static_assert</code></h2>
+<div id="left">
+<div class="org-src-container">
+
+<pre  class="src src-c++"><span style="color: #006400;">// </span><span style="color: #006400;">something homegrown using sizeof trickery</span>
+<span style="color: #483d8b;">#define</span> <span style="color: #0000ff;">STATIC_ASSERT</span><span style="color: #707183;">(</span><span style="color: #a0522d;">cond</span>, <span style="color: #a0522d;">msg</span><span style="color: #707183;">)</span> <span style="color: #0000ff;">...</span>
+
+STATIC_ASSERT<span style="color: #707183;">(</span>x, <span style="color: #b22222;">"x should hold"</span><span style="color: #707183;">)</span>;
+</pre>
+</div>
+</div>
+<div id="right"><div style="text-align:left;">
+<div class="org-src-container">
+
+<pre  class="src src-c++"><span style="color: #006400;">// </span><span style="color: #006400;">nothing: it's in the language now</span>
+<span style="color: #006400;">// </span><span style="color: #006400;">#define STATIC_ASSERT ...</span>
+
+<span style="color: #a020f0;">static_assert</span><span style="color: #707183;">(</span>x, <span style="color: #b22222;">"x should hold"</span><span style="color: #707183;">)</span>;
+</pre>
+</div>
+</div></div>
+
+<aside class="notes">
+<p>
+Faster compile times. Less code to maintain.
+</p>
+
+</aside>
+
+</section>
+</section>
+<section>
+<section id="slide-org64b4b9d">
+<h2 id="org64b4b9d">± 2: <code>&lt;chrono&gt;</code></h2>
+<p>
+Use <code>&lt;chrono&gt;</code> for typed time.
+</p>
+<ul>
+<li>no runtime cost</li>
+<li>expressive</li>
+<li>easy to apply piecemeal</li>
+<li>any questions are probably already answered (by Howard) on SO</li>
+
+</ul>
+
+<p>
+Never accidentally pass milliseconds to a function expecting seconds again!
+</p>
+<aside class="notes">
+<p>
+Again, <code>chrono</code> types can be put in your code in piecemeal fashion.
+The benefits of using strongly typed time are many.
+</p>
+
+</aside>
+
+</section>
+</section>
+<section>
+<section id="slide-org82d22de">
+<h2 id="org82d22de">Take What You Want</h2>
+<p>
+Start using these "no-brainer" recipes.
+</p>
+
+<p>
+You don't have to change your whole style or codebase.
+</p>
+
+<p>
+They'll just make your life better.
+</p>
+
+<div id="left2" style="text-align:right;">
+<ul>
+<li><code>override</code></li>
+<li><code>enum</code> type</li>
+<li><code>using</code></li>
+<li>default member init</li>
+<li><code>= delete</code></li>
+
+</ul>
+</div>
+<div id="right2" style="text-align:left;">
+<ul>
+<li><code>constexpr</code> array size</li>
+<li><code>explicit</code> <code>bool</code></li>
+<li><code>static_assert</code></li>
+<li><code>#include &lt;chrono&gt;</code></li>
+
+</ul>
+</div>
+</section>
+</section>
+</div>
+</div>
+<script src="../reveal.js/lib/js/head.min.js"></script>
+<script src="../reveal.js/js/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: true,
+center: true,
+slideNumber: 'c/t',
+rollingLinks: false,
+keyboard: true,
+overview: true,
+width: 1600,
+height: 900,
+margin: 0.10,
+minScale: 0.50,
+maxScale: 2.50,
+
+theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+transition: Reveal.getQueryHash().transition || 'none', // default/cube/page/concave/zoom/linear/fade/none
+transitionSpeed: 'default',
+multiplex: {
+    secret: '', // null if client
+    id: '', // id, obtained from socket.io server
+    url: '' // Location of socket.io server
+},
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: '../reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+ { src: '../reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: '../reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: '../reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+ { src: '../reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+});
+</script>
+</body>
+</html>
