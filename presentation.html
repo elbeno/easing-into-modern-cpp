@@ -33,8 +33,8 @@
 <script type="text/javascript" src="./presentation.js"></script>
 
 <section>
-<section id="slide-org2c688c4">
-<h2 id="org2c688c4">A Common Notion</h2>
+<section id="slide-org6a668cc">
+<h2 id="org6a668cc">A Common Notion</h2>
 <div class='vertspace2'></div>
 <blockquote nil>
 <p>
@@ -69,8 +69,8 @@ means hiring someone who is used to "Modern C++".
 </section>
 </section>
 <section>
-<section id="slide-org690b68f">
-<h2 id="org690b68f">Easy Features to Adopt</h2>
+<section id="slide-org4d03e53">
+<h2 id="org4d03e53">Easy Features to Adopt</h2>
 <div class='vertspace2'></div>
 <p>
 Here are 7 (± 2) features of C++11 that you can adopt today.
@@ -101,8 +101,8 @@ using these things in new code and apply them to older code as you revisit it.
 </section>
 </section>
 <section>
-<section id="slide-org5d48c1f">
-<h2 id="org5d48c1f">#1: <code>override</code></h2>
+<section id="slide-orge0b1f7d">
+<h2 id="orge0b1f7d">#1: <code>override</code></h2>
 <p>
 Any time you declare a <code>virtual</code> function override in a derived class, put
 <code>override</code> after it.
@@ -111,22 +111,22 @@ Any time you declare a <code>virtual</code> function override in a derived class
 <div id="left">
 <div class="org-src-container">
 
-<pre  class="src src-c++"><span style="color: #a020f0;">struct</span> <span style="color: #228b22;">Foo</span> <span style="color: #707183;">{</span> <span style="color: #a020f0;">virtual</span> <span style="color: #228b22;">void</span> <span style="color: #0000ff;">Frob</span><span style="color: #7388d6;">()</span>; <span style="color: #707183;">}</span>;
+<pre  class="src src-c++"><span style="color: #a020f0;">struct</span> <span style="color: #228b22;">Foo</span> { <span style="color: #a020f0;">virtual</span> <span style="color: #228b22;">void</span> <span style="color: #0000ff;">Frob</span>(); };
 
-<span style="color: #a020f0;">struct</span> <span style="color: #228b22;">Bar</span> : <span style="color: #228b22;">Foo</span> <span style="color: #707183;">{</span>
-  <span style="color: #a020f0;">virtual</span> <span style="color: #228b22;">void</span> <span style="color: #0000ff;">Frob</span><span style="color: #7388d6;">()</span>;
-<span style="color: #707183;">}</span>;
+<span style="color: #a020f0;">struct</span> <span style="color: #228b22;">Bar</span> : <span style="color: #228b22;">Foo</span> {
+  <span style="color: #a020f0;">virtual</span> <span style="color: #228b22;">void</span> <span style="color: #0000ff;">Frob</span>();
+};
 </pre>
 </div>
 </div>
 <div id="right" style="text-align:left;">
 <div class="org-src-container">
 
-<pre  class="src src-c++"><span style="color: #a020f0;">struct</span> <span style="color: #228b22;">Foo</span> <span style="color: #707183;">{</span> <span style="color: #a020f0;">virtual</span> <span style="color: #228b22;">void</span> <span style="color: #0000ff;">DoThing</span><span style="color: #7388d6;">()</span>; <span style="color: #707183;">}</span>;
+<pre  class="src src-c++"><span style="color: #a020f0;">struct</span> <span style="color: #228b22;">Foo</span> { <span style="color: #a020f0;">virtual</span> <span style="color: #228b22;">void</span> <span style="color: #0000ff;">Frob</span>(); };
 
-<span style="color: #a020f0;">struct</span> <span style="color: #228b22;">Bar</span> : <span style="color: #228b22;">Foo</span> <span style="color: #707183;">{</span>
-  <span style="color: #a020f0;">virtual</span> <span style="color: #228b22;">void</span> <span style="color: #0000ff;">DoThing</span><span style="color: #7388d6;">()</span> <span style="color: #a020f0;">override</span>;
-<span style="color: #707183;">}</span>;
+<span style="color: #a020f0;">struct</span> <span style="color: #228b22;">Bar</span> : <span style="color: #228b22;">Foo</span> {
+  <span style="color: #a020f0;">virtual</span> <span style="color: #228b22;">void</span> <span style="color: #0000ff;">Frob</span>() <span style="color: #a020f0;">override</span>;
+};
 </pre>
 </div>
 </div>
@@ -156,20 +156,20 @@ the compiler knew.
 </section>
 </section>
 <section>
-<section id="slide-org27d5dcc">
-<h2 id="org27d5dcc">#2: <code>underlying_type</code> for <code>enum</code></h2>
+<section id="slide-orge0e2fb5">
+<h2 id="orge0e2fb5">#2: <code>underlying_type</code> for <code>enum</code></h2>
 <div id="left">
 <div class="org-src-container">
 
 <pre  class="src src-c++"><span style="color: #a020f0;">enum</span> <span style="color: #228b22;">ChipShopOrder</span>
-<span style="color: #707183;">{</span>
+{
   <span style="color: #a0522d;">COD_AND_CHIPS</span>,
   <span style="color: #a0522d;">PLAICE_AND_CHIPS</span>,
   <span style="color: #a0522d;">MUSHY_PEAS</span>,
   <span style="color: #a0522d;">CURRY_SAUCE</span>,
   <span style="color: #0000ff;">...</span>
   <span style="color: #a0522d;">INVALID_ORDER</span> = <span style="color: #a020f0;">0x</span><span style="color: #008b8b;">ffffffff</span>;
-<span style="color: #707183;">}</span>
+}
 </pre>
 </div>
 </div>
@@ -177,14 +177,14 @@ the compiler knew.
 <div class="org-src-container">
 
 <pre  class="src src-c++"><span style="color: #a020f0;">enum</span> <span style="color: #228b22;">ChipShopOrder</span> : uint32_t
-<span style="color: #707183;">{</span>
+{
   <span style="color: #a0522d;">COD_AND_CHIPS</span>,
   <span style="color: #a0522d;">PLAICE_AND_CHIPS</span>,
   <span style="color: #a0522d;">MUSHY_PEAS</span>,
   <span style="color: #a0522d;">CURRY_SAUCE</span>,
   <span style="color: #0000ff;">...</span>
   <span style="color: #a0522d;">INVALID_ORDER</span> = <span style="color: #a020f0;">0x</span><span style="color: #008b8b;">badf00d</span>;
-<span style="color: #707183;">}</span>
+}
 </pre>
 </div>
 </div></div>
@@ -210,8 +210,8 @@ Helps with serialization.
 </section>
 </section>
 <section>
-<section id="slide-org0cc4e2d">
-<h2 id="org0cc4e2d">#3: <code>using</code> over <code>typedef</code></h2>
+<section id="slide-orgd645b2b">
+<h2 id="orgd645b2b">#3: <code>using</code> over <code>typedef</code></h2>
 <p>
 <code>typedef</code>: never straightforward, never readable.
 </p>
@@ -220,7 +220,7 @@ Helps with serialization.
 
 <pre  class="src src-c++"><span style="color: #a020f0;">typedef</span> <span style="color: #228b22;">int</span> <span style="color: #228b22;">AnimId</span>;
 
-<span style="color: #a020f0;">typedef</span> <span style="color: #228b22;">int</span> <span style="color: #707183;">(</span>*<span style="color: #228b22;">FP</span><span style="color: #707183;">)(</span><span style="color: #228b22;">int</span>, <span style="color: #228b22;">int</span><span style="color: #707183;">)</span>;
+<span style="color: #a020f0;">typedef</span> <span style="color: #228b22;">int</span> (*<span style="color: #228b22;">FP</span>)(<span style="color: #228b22;">int</span>, <span style="color: #228b22;">int</span>);
 
 
 </pre>
@@ -231,9 +231,9 @@ Helps with serialization.
 
 <pre  class="src src-c++"><span style="color: #a020f0;">using</span> <span style="color: #228b22;">AnimId</span> = <span style="color: #228b22;">int</span>;
 
-<span style="color: #a020f0;">using</span> <span style="color: #228b22;">FP</span> = <span style="color: #228b22;">int</span> <span style="color: #707183;">(</span>*<span style="color: #707183;">)(</span><span style="color: #228b22;">int</span>, <span style="color: #228b22;">int</span><span style="color: #707183;">)</span>;
+<span style="color: #a020f0;">using</span> <span style="color: #228b22;">FP</span> = <span style="color: #228b22;">int</span> (*)(<span style="color: #228b22;">int</span>, <span style="color: #228b22;">int</span>);
 <span style="color: #006400;">// </span><span style="color: #006400;">or:</span>
-<span style="color: #a020f0;">using</span> <span style="color: #228b22;">FP</span> = <span style="color: #a020f0;">auto</span><span style="color: #707183;">(</span>*<span style="color: #707183;">)</span> <span style="color: #707183;">(</span><span style="color: #228b22;">int</span>, <span style="color: #228b22;">int</span><span style="color: #707183;">)</span> -&gt; <span style="color: #228b22;">int</span>;
+<span style="color: #a020f0;">using</span> <span style="color: #228b22;">FP</span> = <span style="color: #a020f0;">auto</span>(*) (<span style="color: #228b22;">int</span>, <span style="color: #228b22;">int</span>) -&gt; <span style="color: #228b22;">int</span>;
 </pre>
 </div>
 </div></div>
@@ -259,21 +259,21 @@ If you use <code>auto</code> nowhere else, this is a reasonable use of it. <code
 </section>
 </section>
 <section>
-<section id="slide-orgee11f62">
-<h2 id="orgee11f62">#4: Default member initialization</h2>
+<section id="slide-orgefac528">
+<h2 id="orgefac528">#4: Default member initialization</h2>
 <div id="left">
 <div class="org-src-container">
 
 <pre  class="src src-c++"><span style="color: #a020f0;">struct</span> <span style="color: #228b22;">S</span>
-<span style="color: #707183;">{</span>
-  <span style="color: #0000ff;">S</span><span style="color: #7388d6;">()</span> : value<span style="color: #7388d6;">(</span><span style="color: #008b8b;">5</span><span style="color: #7388d6;">)</span> <span style="color: #7388d6;">{}</span>
+{
+  <span style="color: #0000ff;">S</span>() : value(5) {}
   <span style="color: #228b22;">int</span> <span style="color: #a0522d;">value</span>;
-<span style="color: #707183;">}</span>;
+};
 
-<span style="color: #228b22;">int</span> <span style="color: #0000ff;">foo</span><span style="color: #707183;">()</span> <span style="color: #707183;">{</span>
+<span style="color: #228b22;">int</span> <span style="color: #0000ff;">foo</span>() {
   <span style="color: #228b22;">S</span> <span style="color: #a0522d;">s</span>;
   <span style="color: #a020f0;">return</span> s.value;
-<span style="color: #707183;">}</span>
+}
 </pre>
 </div>
 <a href="https://godbolt.org/g/Wv9wge" data-preview-link>https://godbolt.org/g/Wv9wge</a>
@@ -282,15 +282,15 @@ If you use <code>auto</code> nowhere else, this is a reasonable use of it. <code
 <div class="org-src-container">
 
 <pre  class="src src-c++"><span style="color: #a020f0;">struct</span> <span style="color: #228b22;">S</span>
-<span style="color: #707183;">{</span>
+{
   <span style="color: #006400;">// </span><span style="color: #006400;">constructor is not needed...</span>
-  <span style="color: #228b22;">int</span> <span style="color: #a0522d;">value</span> = <span style="color: #008b8b;">5</span>;
-<span style="color: #707183;">}</span>;
+  <span style="color: #228b22;">int</span> <span style="color: #a0522d;">value</span> = 5;
+};
 
-<span style="color: #228b22;">int</span> <span style="color: #0000ff;">foo</span><span style="color: #707183;">()</span> <span style="color: #707183;">{</span>
+<span style="color: #228b22;">int</span> <span style="color: #0000ff;">foo</span>() {
   <span style="color: #228b22;">S</span> <span style="color: #a0522d;">s</span>;
   <span style="color: #a020f0;">return</span> s.value;
-<span style="color: #707183;">}</span>
+}
 </pre>
 </div>
 <a href="https://godbolt.org/g/AGZcwL" data-preview-link>https://godbolt.org/g/AGZcwL</a>
@@ -316,30 +316,30 @@ about performance in debug mode, here's something that can help.
 </section>
 </section>
 <section>
-<section id="slide-org2a23858">
-<h2 id="org2a23858">#5: <code>delete</code> unimplemented SMFs</h2>
+<section id="slide-org03c1ed4">
+<h2 id="org03c1ed4">#5: <code>delete</code> unimplemented SMFs</h2>
 <p>
-Turn a link error into a (more understandable) compile error.
+Can turn a link error into a (more understandable) compile error.
 </p>
 <div id="left">
 <div class="org-src-container">
 
-<pre  class="src src-c++"><span style="color: #a020f0;">class</span> <span style="color: #228b22;">Foo</span> <span style="color: #707183;">{</span>
+<pre  class="src src-c++"><span style="color: #a020f0;">class</span> <span style="color: #228b22;">Foo</span> {
 <span style="color: #a020f0;">private</span>:
-  <span style="color: #0000ff;">Foo</span><span style="color: #7388d6;">(</span><span style="color: #a020f0;">const</span> <span style="color: #228b22;">Foo</span>&amp;<span style="color: #7388d6;">)</span>;            <span style="color: #006400;">// </span><span style="color: #006400;">unimplemented</span>
-  <span style="color: #228b22;">Foo</span>&amp; <span style="color: #a020f0;">operator</span><span style="color: #0000ff;">=</span><span style="color: #7388d6;">(</span><span style="color: #a020f0;">const</span> <span style="color: #228b22;">Foo</span>&amp;<span style="color: #7388d6;">)</span>; <span style="color: #006400;">// </span><span style="color: #006400;">unimplemented</span>
-<span style="color: #707183;">}</span>;
+  <span style="color: #0000ff;">Foo</span>(<span style="color: #a020f0;">const</span> <span style="color: #228b22;">Foo</span>&amp;);            <span style="color: #006400;">// </span><span style="color: #006400;">unimplemented</span>
+  <span style="color: #228b22;">Foo</span>&amp; <span style="color: #a020f0;">operator</span><span style="color: #0000ff;">=</span>(<span style="color: #a020f0;">const</span> <span style="color: #228b22;">Foo</span>&amp;); <span style="color: #006400;">// </span><span style="color: #006400;">unimplemented</span>
+};
 </pre>
 </div>
 </div>
 <div id="right"><div style="text-align:left;">
 <div class="org-src-container">
 
-<pre  class="src src-c++"><span style="color: #a020f0;">class</span> <span style="color: #228b22;">Foo</span> <span style="color: #707183;">{</span>
+<pre  class="src src-c++"><span style="color: #a020f0;">class</span> <span style="color: #228b22;">Foo</span> {
 <span style="color: #a020f0;">public</span>:
-  <span style="color: #0000ff;">Foo</span><span style="color: #7388d6;">(</span><span style="color: #a020f0;">const</span> <span style="color: #228b22;">Foo</span>&amp;<span style="color: #7388d6;">)</span> = <span style="color: #a020f0;">delete</span>;
-  <span style="color: #228b22;">Foo</span>&amp; <span style="color: #a020f0;">operator</span><span style="color: #0000ff;">=</span><span style="color: #7388d6;">(</span><span style="color: #a020f0;">const</span> <span style="color: #228b22;">Foo</span>&amp;<span style="color: #7388d6;">)</span> = <span style="color: #a020f0;">delete</span>;
-<span style="color: #707183;">}</span>;
+  <span style="color: #0000ff;">Foo</span>(<span style="color: #a020f0;">const</span> <span style="color: #228b22;">Foo</span>&amp;) = <span style="color: #a020f0;">delete</span>;
+  <span style="color: #228b22;">Foo</span>&amp; <span style="color: #a020f0;">operator</span><span style="color: #0000ff;">=</span>(<span style="color: #a020f0;">const</span> <span style="color: #228b22;">Foo</span>&amp;) = <span style="color: #a020f0;">delete</span>;
+};
 </pre>
 </div>
 </div></div>
@@ -355,14 +355,14 @@ compile time.
 </section>
 </section>
 <section>
-<section id="slide-org616674d">
-<h2 id="org616674d">#6: <code>constexpr</code> array size</h2>
+<section id="slide-org84bb520">
+<h2 id="org84bb520">#6: <code>constexpr</code> array size</h2>
 <div id="left">
 <div class="org-src-container">
 
 <pre  class="src src-c++"><span style="color: #006400;">// </span><span style="color: #006400;">x had better actually be an array!</span>
-<span style="color: #483d8b;">#define</span> <span style="color: #0000ff;">lengthof</span><span style="color: #707183;">(</span><span style="color: #a0522d;">x</span><span style="color: #707183;">)</span> \
-  <span style="color: #707183;">(</span><span style="color: #a020f0;">sizeof</span><span style="color: #7388d6;">(</span>x<span style="color: #7388d6;">)</span> / <span style="color: #a020f0;">sizeof</span><span style="color: #7388d6;">(</span>x<span style="color: #909183;">[</span><span style="color: #008b8b;">0</span><span style="color: #909183;">]</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>;
+<span style="color: #483d8b;">#define</span> <span style="color: #0000ff;">lengthof</span>(<span style="color: #a0522d;">x</span>) \
+  (<span style="color: #a020f0;">sizeof</span>(x) / <span style="color: #a020f0;">sizeof</span>(x[0]));
 
 
 </pre>
@@ -371,11 +371,11 @@ compile time.
 <div id="right"><div style="text-align:left;">
 <div class="org-src-container">
 
-<pre  class="src src-c++"><span style="color: #a020f0;">template</span> <span style="color: #707183;">&lt;</span><span style="color: #a020f0;">typename</span> <span style="color: #228b22;">A</span>, <span style="color: #008b8b;">std</span>::<span style="color: #228b22;">size_t</span> <span style="color: #a0522d;">N</span><span style="color: #707183;">&gt;</span>
-<span style="color: #a020f0;">constexpr</span> <span style="color: #008b8b;">std</span>::<span style="color: #228b22;">size_t</span> <span style="color: #0000ff;">lengthof</span><span style="color: #707183;">(</span><span style="color: #228b22;">T</span> <span style="color: #7388d6;">(</span>&amp;<span style="color: #7388d6;">)[</span>N<span style="color: #7388d6;">]</span><span style="color: #707183;">)</span>
-<span style="color: #707183;">{</span>
+<pre  class="src src-c++"><span style="color: #a020f0;">template</span> &lt;<span style="color: #a020f0;">typename</span> <span style="color: #228b22;">A</span>, <span style="color: #008b8b;">std</span>::<span style="color: #228b22;">size_t</span> <span style="color: #a0522d;">N</span>&gt;
+<span style="color: #a020f0;">constexpr</span> <span style="color: #008b8b;">std</span>::<span style="color: #228b22;">size_t</span> <span style="color: #0000ff;">lengthof</span>(<span style="color: #228b22;">T</span> (&amp;)[N])
+{
   <span style="color: #a020f0;">return</span> N;
-<span style="color: #707183;">}</span>
+}
 </pre>
 </div>
 </div></div>
@@ -391,8 +391,8 @@ Extra type safety for no cost. It's just a recipe.
 </section>
 </section>
 <section>
-<section id="slide-org3c31fd0">
-<h2 id="org3c31fd0">#7: <code>explicit</code> conversion to <code>bool</code></h2>
+<section id="slide-org672f217">
+<h2 id="org672f217">#7: <code>explicit</code> conversion to <code>bool</code></h2>
 <p>
 Ditch the safe bool idiom, use <code>explicit</code> conversion to bool.
 </p>
@@ -400,11 +400,11 @@ Ditch the safe bool idiom, use <code>explicit</code> conversion to bool.
 <div class="org-src-container">
 
 <pre  class="src src-c++"><span style="color: #a020f0;">struct</span> <span style="color: #228b22;">Foo</span>
-<span style="color: #707183;">{</span>
+{
   <span style="color: #006400;">// </span><span style="color: #006400;">to prevent unwanted conversion</span>
   <span style="color: #006400;">// </span><span style="color: #006400;">to bool, do a trick</span>
   <span style="color: #006400;">// </span><span style="color: #006400;">e.g. with a "magic" PMF type</span>
-<span style="color: #707183;">}</span>;
+};
 </pre>
 </div>
 </div>
@@ -412,11 +412,11 @@ Ditch the safe bool idiom, use <code>explicit</code> conversion to bool.
 <div class="org-src-container">
 
 <pre  class="src src-c++"><span style="color: #a020f0;">struct</span> <span style="color: #228b22;">Foo</span>
-<span style="color: #707183;">{</span>
-  <span style="color: #a020f0;">explicit</span> <span style="color: #a020f0;">operator</span> <span style="color: #228b22;">bool</span><span style="color: #7388d6;">()</span> <span style="color: #a020f0;">const</span> <span style="color: #7388d6;">{</span>
+{
+  <span style="color: #a020f0;">explicit</span> <span style="color: #a020f0;">operator</span> <span style="color: #228b22;">bool</span>() <span style="color: #a020f0;">const</span> {
     <span style="color: #006400;">// </span><span style="color: #006400;">whichever member we want to test</span>
-  <span style="color: #7388d6;">}</span>;
-<span style="color: #707183;">}</span>;
+  };
+};
 </pre>
 </div>
 </div></div>
@@ -432,15 +432,15 @@ you want one, and nowhere you don't.
 </section>
 </section>
 <section>
-<section id="slide-org54d8279">
-<h2 id="org54d8279">± 2: <code>static_assert</code></h2>
+<section id="slide-org14081d1">
+<h2 id="org14081d1">± 2: <code>static_assert</code></h2>
 <div id="left">
 <div class="org-src-container">
 
 <pre  class="src src-c++"><span style="color: #006400;">// </span><span style="color: #006400;">something homegrown using sizeof trickery</span>
-<span style="color: #483d8b;">#define</span> <span style="color: #0000ff;">STATIC_ASSERT</span><span style="color: #707183;">(</span><span style="color: #a0522d;">cond</span>, <span style="color: #a0522d;">msg</span><span style="color: #707183;">)</span> <span style="color: #0000ff;">...</span>
+<span style="color: #483d8b;">#define</span> <span style="color: #0000ff;">STATIC_ASSERT</span>(<span style="color: #a0522d;">cond</span>, <span style="color: #a0522d;">msg</span>) <span style="color: #0000ff;">...</span>
 
-STATIC_ASSERT<span style="color: #707183;">(</span>x, <span style="color: #b22222;">"x should hold"</span><span style="color: #707183;">)</span>;
+STATIC_ASSERT(x, <span style="color: #8b2252;">"x should hold"</span>);
 </pre>
 </div>
 </div>
@@ -450,7 +450,7 @@ STATIC_ASSERT<span style="color: #707183;">(</span>x, <span style="color: #b2222
 <pre  class="src src-c++"><span style="color: #006400;">// </span><span style="color: #006400;">nothing: it's in the language now</span>
 <span style="color: #006400;">// </span><span style="color: #006400;">#define STATIC_ASSERT ...</span>
 
-<span style="color: #a020f0;">static_assert</span><span style="color: #707183;">(</span>x, <span style="color: #b22222;">"x should hold"</span><span style="color: #707183;">)</span>;
+<span style="color: #a020f0;">static_assert</span>(x, <span style="color: #8b2252;">"x should hold"</span>);
 </pre>
 </div>
 </div></div>
@@ -465,8 +465,8 @@ Faster compile times. Less code to maintain.
 </section>
 </section>
 <section>
-<section id="slide-org64b4b9d">
-<h2 id="org64b4b9d">± 2: <code>&lt;chrono&gt;</code></h2>
+<section id="slide-org9f57779">
+<h2 id="org9f57779">± 2: <code>&lt;chrono&gt;</code></h2>
 <p>
 Use <code>&lt;chrono&gt;</code> for typed time.
 </p>
@@ -492,8 +492,8 @@ The benefits of using strongly typed time are many.
 </section>
 </section>
 <section>
-<section id="slide-org82d22de">
-<h2 id="org82d22de">Take What You Want</h2>
+<section id="slide-org09bfdf0">
+<h2 id="org09bfdf0">Take What You Want</h2>
 <p>
 Start using these "no-brainer" recipes.
 </p>

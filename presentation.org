@@ -84,10 +84,10 @@ struct Bar : Foo {
 #+REVEAL_HTML: </div>
 #+REVEAL_HTML: <div id="right" style="text-align:left;">
 #+BEGIN_SRC c++
-struct Foo { virtual void DoThing(); };
+struct Foo { virtual void Frob(); };
 
 struct Bar : Foo {
-  virtual void DoThing() override;
+  virtual void Frob() override;
 };
 #+END_SRC
 #+REVEAL_HTML: </div>
@@ -217,7 +217,7 @@ about performance in debug mode, here's something that can help.
 #+END_NOTES
 
 * #5: ~delete~ unimplemented SMFs
-Turn a link error into a (more understandable) compile error.
+Can turn a link error into a (more understandable) compile error.
 #+REVEAL_HTML: <div id="left">
 #+BEGIN_SRC c++
 class Foo {
